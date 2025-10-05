@@ -1,0 +1,45 @@
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
+import { User } from "./User.js";
+import { Note } from "./Note.js";
+import { Question } from "./Question.js";
+
+@Entity()
+export class Quiz {
+  @PrimaryGeneratedColumn("uuid")
+  id: string;
+
+  @Column()
+  title: string;
+
+  @ManyToOne(() => User, (user) => user.quizzes, { onDelete: "CASCADE" })
+  user: User;
+
+  @ManyToOne(() => Note, (note) => note.quizzes, {
+    nullable: true,
+    onDelete: "SET NULL",
+  })
+  note: Note;
+
+  @OneToMany(() => Question, (q) => q.quiz, { cascade: true })
+  questions: Question[];
+
+  @Column({ default: 0 })
+  attempts: number;
+
+  @Column({ default: 0 })
+  averageScore: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+}
