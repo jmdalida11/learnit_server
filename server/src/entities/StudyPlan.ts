@@ -13,7 +13,7 @@ export class StudyPlan {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column()
+  @Column("varchar", { length: 255 })
   subject: string;
 
   @Column("text", { nullable: true })
@@ -22,7 +22,7 @@ export class StudyPlan {
   @Column("date")
   scheduledDate: Date;
 
-  @Column({ default: false })
+  @Column("boolean", { default: false })
   completed: boolean;
 
   @ManyToOne(() => User, (user) => user.studyPlans, { onDelete: "CASCADE" })

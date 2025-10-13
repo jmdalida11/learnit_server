@@ -2,9 +2,9 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
-  OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from "typeorm";
 import { Note } from "./Note.js";
 import { Quiz } from "./Quiz.js";
@@ -16,16 +16,16 @@ export class User {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column({ unique: true })
+  @Column("varchar", { length: 255, unique: true })
   username: string;
 
-  @Column()
+  @Column("varchar")
   password: string;
 
-  @Column({ unique: true })
+  @Column("varchar", { unique: true })
   email: string;
 
-  @Column()
+  @Column("varchar", { length: 100 })
   name: string;
 
   @OneToMany(() => Note, (note) => note.user)

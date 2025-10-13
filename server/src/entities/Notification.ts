@@ -12,13 +12,13 @@ export class Notification {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column()
+  @Column("text")
   message: string;
 
-  @Column({ default: false })
+  @Column("boolean", { default: false })
   read: boolean;
 
-  @Column("timestamp")
+  @Column("datetime")
   scheduledFor: Date;
 
   @ManyToOne(() => User, (user) => user.notifications, { onDelete: "CASCADE" })

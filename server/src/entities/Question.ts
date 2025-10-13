@@ -6,16 +6,16 @@ export class Question {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column()
+  @Column("text")
   questionText: string;
 
   @Column("simple-array", { nullable: true })
   options: string[]; // for MCQs
 
-  @Column({ nullable: true })
+  @Column("text", { nullable: true })
   correctAnswer: string;
 
-  @Column({ default: "multiple_choice" })
+  @Column("text", { default: "multiple_choice" })
   type: string; // multiple_choice | true_false | short_answer | flashcard
 
   @ManyToOne(() => Quiz, (quiz) => quiz.questions, { onDelete: "CASCADE" })

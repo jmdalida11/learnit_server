@@ -15,7 +15,7 @@ export class Note {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column()
+  @Column("varchar", { length: 255 })
   title: string;
 
   @Column("text")
@@ -24,7 +24,7 @@ export class Note {
   @Column("simple-array", { nullable: true })
   tags: string[];
 
-  @Column({ default: false })
+  @Column("boolean", { default: false })
   isShared: boolean;
 
   @ManyToOne(() => User, (user) => user.notes, { onDelete: "CASCADE" })

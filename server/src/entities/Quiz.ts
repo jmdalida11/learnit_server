@@ -16,7 +16,7 @@ export class Quiz {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
-  @Column()
+  @Column("varchar", { length: 255 })
   title: string;
 
   @ManyToOne(() => User, (user) => user.quizzes, { onDelete: "CASCADE" })
@@ -31,10 +31,10 @@ export class Quiz {
   @OneToMany(() => Question, (q) => q.quiz, { cascade: true })
   questions: Question[];
 
-  @Column({ default: 0 })
+  @Column("int", { default: 0 })
   attempts: number;
 
-  @Column({ default: 0 })
+  @Column("decimal", { default: 0 })
   averageScore: number;
 
   @CreateDateColumn()
