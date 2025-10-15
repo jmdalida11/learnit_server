@@ -21,7 +21,10 @@ export class Notification {
   @Column("datetime")
   scheduledFor: Date;
 
-  @ManyToOne(() => User, (user) => user.notifications, { onDelete: "CASCADE" })
+  @ManyToOne(() => User, (user) => user.notifications, {
+    onDelete: "CASCADE",
+    nullable: false,
+  })
   user: User;
 
   @CreateDateColumn()

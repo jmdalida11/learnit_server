@@ -18,7 +18,7 @@ export class Note {
   @Column("varchar", { length: 255 })
   title: string;
 
-  @Column("text")
+  @Column("text", { default: "" })
   content: string;
 
   @Column("simple-array", { nullable: true })
@@ -27,7 +27,10 @@ export class Note {
   @Column("boolean", { default: false })
   isShared: boolean;
 
-  @ManyToOne(() => User, (user) => user.notes, { onDelete: "CASCADE" })
+  @ManyToOne(() => User, (user) => user.notes, {
+    onDelete: "CASCADE",
+    nullable: false,
+  })
   user: User;
 
   @OneToMany(() => Quiz, (quiz) => quiz.note)

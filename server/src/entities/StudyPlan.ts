@@ -25,7 +25,10 @@ export class StudyPlan {
   @Column("boolean", { default: false })
   completed: boolean;
 
-  @ManyToOne(() => User, (user) => user.studyPlans, { onDelete: "CASCADE" })
+  @ManyToOne(() => User, (user) => user.studyPlans, {
+    onDelete: "CASCADE",
+    nullable: false,
+  })
   user: User;
 
   @CreateDateColumn()

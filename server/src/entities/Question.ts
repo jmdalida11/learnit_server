@@ -18,6 +18,9 @@ export class Question {
   @Column("text", { default: "multiple_choice" })
   type: string; // multiple_choice | true_false | short_answer | flashcard
 
-  @ManyToOne(() => Quiz, (quiz) => quiz.questions, { onDelete: "CASCADE" })
+  @ManyToOne(() => Quiz, (quiz) => quiz.questions, {
+    onDelete: "CASCADE",
+    nullable: false,
+  })
   quiz: Quiz;
 }

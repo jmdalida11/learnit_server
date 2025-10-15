@@ -1,0 +1,8 @@
+### Create a new note
+POST http://localhost:3001/note/
+Content-Type: application/json
+
+{
+    "userId": "ac8ec097-2047-4009-9c91-04a63047b04e",
+    "title": "My First Note"
+}

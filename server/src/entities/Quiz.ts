@@ -19,7 +19,10 @@ export class Quiz {
   @Column("varchar", { length: 255 })
   title: string;
 
-  @ManyToOne(() => User, (user) => user.quizzes, { onDelete: "CASCADE" })
+  @ManyToOne(() => User, (user) => user.quizzes, {
+    onDelete: "CASCADE",
+    nullable: false,
+  })
   user: User;
 
   @ManyToOne(() => Note, (note) => note.quizzes, {

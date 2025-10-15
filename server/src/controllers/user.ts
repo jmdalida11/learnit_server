@@ -4,7 +4,6 @@ import { User } from "../entities/User.js";
 import { CreateUserDTO } from "../validations/user.js";
 
 export const getUser = async (req: Request, res: Response): Promise<void> => {
-  console.log("Fetching user with ID:", req.params["id"]);
   const user = await AppDataSource.getRepository(User)
     .createQueryBuilder("user")
     .select()
@@ -44,6 +43,6 @@ export const createUser = async (
     const savedUser = await AppDataSource.getRepository(User).save(newUser);
     res.status(201).json(savedUser);
   } catch (error) {
-    res.status(500).json({ message: "Error creating user." });
+    res.status(500).json({ message: "Error on creating a user" });
   }
 };
