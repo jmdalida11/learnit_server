@@ -8,3 +8,6 @@ Content-Type: application/json
     "password": "barbarbar",
     "email": "baz@gmail.com"
 }
+
+### Get all users
+GET http://localhost:3001/user/

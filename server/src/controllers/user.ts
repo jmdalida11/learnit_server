@@ -18,6 +18,14 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
   res.status(200).json(user);
 };
 
+export const getAllUsers = async (
+  _req: Request,
+  res: Response
+): Promise<void> => {
+  const users = await AppDataSource.getRepository(User).find();
+  res.status(200).json(users);
+};
+
 export const createUser = async (
   req: Request,
   res: Response

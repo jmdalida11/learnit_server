@@ -34,6 +34,24 @@ export const createNote = async (
   }
 };
 
+export const getAllUserNotes = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const userId = req.params["userId"];
+
+  try {
+    const notes = await AppDataSource.getRepository(Note)
+      .createQueryBuilder("note")
+      .where("note.userId = :userId", { userId })
+      .getMany();
+
+    res.status(200).json(notes);
+  } catch (error) {
+    res.status(500).json({ message: "Error retrieving notes for the user." });
+  }
+};
+
 export const getNote = async (req: Request, res: Response): Promise<void> => {
   const note = await AppDataSource.getRepository(Note)
     .createQueryBuilder("note")
