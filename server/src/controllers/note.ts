@@ -1,18 +1,16 @@
 import type { Request, Response } from "express";
-import { AppDataSource } from "../datasource.js";
 import { Note } from "../entities/Note.js";
 import { CreateNoteDTO, UpdateNoteDTO } from "../validations/note.js";
 import { User } from "../entities/User.js";
 
 export const createNote = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const { userId, title } = req.body as CreateNoteDTO;
 
-    const user = await AppDataSource.getRepository(User)
-      .createQueryBuilder("user")
+    const user = await User.createQueryBuilder("user")
       .select()
       .where("user.id = :id", { id: userId })
       .getOne();
@@ -22,12 +20,12 @@ export const createNote = async (
       return;
     }
 
-    const newNote = AppDataSource.getRepository(Note).create({
+    const newNote = Note.create({
       user,
       title,
     });
 
-    const savedNote = await AppDataSource.getRepository(Note).save(newNote);
+    const savedNote = await Note.save(newNote);
     res.status(201).json(savedNote);
   } catch (error) {
     res.status(500).json({ message: "Error creating a note" });
@@ -36,13 +34,12 @@ export const createNote = async (
 
 export const getAllUserNotes = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   const userId = req.params["userId"];
 
   try {
-    const notes = await AppDataSource.getRepository(Note)
-      .createQueryBuilder("note")
+    const notes = await Note.createQueryBuilder("note")
       .where("note.userId = :userId", { userId })
       .getMany();
 
@@ -53,8 +50,7 @@ export const getAllUserNotes = async (
 };
 
 export const getNote = async (req: Request, res: Response): Promise<void> => {
-  const note = await AppDataSource.getRepository(Note)
-    .createQueryBuilder("note")
+  const note = await Note.createQueryBuilder("note")
     .select()
     .where("note.id = :id", { id: req.params["id"] })
     .getOne();
@@ -69,15 +65,14 @@ export const getNote = async (req: Request, res: Response): Promise<void> => {
 
 export const updateNote = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   const { title, content, tags, isShared } = req.body as UpdateNoteDTO;
 
   try {
-    const noteRepository = AppDataSource.getRepository(Note);
     const id = req.params["id"] || "";
 
-    const note = await noteRepository.findOne({
+    const note = await Note.findOne({
       where: { id },
     });
 
@@ -91,7 +86,7 @@ export const updateNote = async (
     note.tags = tags ?? note.tags;
     note.isShared = isShared ?? note.isShared;
 
-    const updatedNote = await noteRepository.save(note);
+    const updatedNote = await Note.save(note);
     res.status(200).json(updatedNote);
   } catch (error) {
     res.status(500).json({ message: "Error updating the note." });
@@ -100,11 +95,10 @@ export const updateNote = async (
 
 export const deleteNote = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
-    const noteRepository = AppDataSource.getRepository(Note);
-    const note = await noteRepository.findOne({
+    const note = await Note.findOne({
       where: { id: req.params["id"] || "" },
     });
 
@@ -113,7 +107,7 @@ export const deleteNote = async (
       return;
     }
 
-    await noteRepository.remove(note);
+    await Note.remove(note);
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ message: "Error deleting the note." });

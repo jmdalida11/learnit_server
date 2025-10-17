@@ -1,15 +1,88 @@
 import express from "express";
 import userRouter from "./routes/user.js";
 import noteRouter from "./routes/note.js";
+import authRouter from "./routes/auth.js";
+import session from "express-session";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import csurf from "csurf";
+
 import "dotenv/config";
+import { initializeDataSource } from "./datasource.js";
 
 const port = process.env["PORT"] || 3000;
-
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
+app.use(
+  session({
+    name: "sessionId",
+    secret: process.env["SESSION_SECRET"] || "supersecret123",
+    resave: false,
+    saveUninitialized: false,
+    rolling: true,
+    cookie: {
+      httpOnly: true, // prevent JS access
+      secure: false, // set true in production (requires HTTPS)
+      maxAge: 1000 * 60 * 60, // 1 hour
+    },
+  })
+);
+app.use(
+  cors({
+    origin: "*", // your frontend URL
+    credentials: true, // allow cookies
+  })
+);
+// app.use(
+//   csurf({
+//     cookie: false, // use session to store CSRF secret
+//   })
+// );
+
+interface CsrfError extends Error {
+  code: string;
+}
+app.use(
+  (
+    err: CsrfError,
+    _req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+  ) => {
+    if (err.code === "EBADCSRFTOKEN") {
+      res.status(403).json({ message: "Invalid CSRF token" });
+    }
+    next(err);
+  }
+);
+
+interface SyntaxErrorWithStatus extends SyntaxError {
+  status?: number;
+  body?: unknown;
+}
+app.use(
+  (
+    err: SyntaxErrorWithStatus,
+    _req: express.Request,
+    res: express.Response,
+    _next: express.NextFunction
+  ) => {
+    if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
+      res.status(400).send({ message: "Invalid JSON payload" });
+    }
+    // For other errors, log the details and send a generic error message
+    console.error(err.stack); // Log the full error for debugging
+    res.status(500).send({ message: "Something went wrong!" });
+  }
+);
+
 app.use("/user", userRouter);
 app.use("/note", noteRouter);
+app.use("/auth", authRouter);
+
+initializeDataSource();
 
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

@@ -1,0 +1,21 @@
+# Step 1: Fetch the CSRF token (if provided by a specific endpoint)
+GET http://localhost:3001/auth/csrf-token
+Content-Type: application/json
+
+### Step 2: Use the CSRF token in the login request
+POST http://localhost:3001/auth/login
+Content-Type: application/json
+X-CSRF-Token: pSTGgOO9-Axs8oJ9eZVvZyEcVpv5p9xya9mU
+
+{
+  "username": "baz",
+  "password": "barbarbar"
+}
+
+### Get user by ID
+GET http://localhost:3001/user/me
+Cookie: sessionId=s%3Apd0tzLmtOuNJEEDufs6pKhdk9qJtUypC.phC8pp4Y7rQ0wYCLxnBeQ7W1x%2BeJaEUXkKL6BtzG%2B7s
+
+### Logout
+POST http://localhost:3001/auth/logout
+X-CSRF-Token: Y4LSPaDy-A1obEegvcwnV7VuH5NjLeAz-PsI

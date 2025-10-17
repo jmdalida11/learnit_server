@@ -4,11 +4,12 @@ import {
   Column,
   ManyToOne,
   CreateDateColumn,
+  BaseEntity,
 } from "typeorm";
 import { User } from "./User.js";
 
 @Entity()
-export class Notification {
+export class Notification extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

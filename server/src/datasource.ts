@@ -19,7 +19,7 @@ export const AppDataSource = new DataSource({
   migrations: ["src/migrations/*.ts"],
 });
 
-const initialize = async () => {
+export const initializeDataSource = async () => {
   try {
     await AppDataSource.initialize();
     console.log("Data Source has been initialized!");
@@ -27,5 +27,3 @@ const initialize = async () => {
     console.log(error);
   }
 };
-
-initialize();

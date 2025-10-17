@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  BaseEntity,
 } from "typeorm";
 import { Note } from "./Note.js";
 import { Quiz } from "./Quiz.js";
@@ -12,7 +13,7 @@ import { StudyPlan } from "./StudyPlan.js";
 import { Notification } from "./Notification.js";
 
 @Entity()
-export class User {
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 
@@ -22,8 +23,14 @@ export class User {
   @Column("varchar")
   password: string;
 
+  @Column("varchar")
+  salt: string;
+
   @Column("varchar", { unique: true })
   email: string;
+
+  @Column("boolean", { default: false })
+  verified: boolean;
 
   @Column("varchar", { length: 100 })
   name: string;

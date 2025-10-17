@@ -6,13 +6,14 @@ import {
   OneToMany,
   CreateDateColumn,
   UpdateDateColumn,
+  BaseEntity,
 } from "typeorm";
 import { User } from "./User.js";
 import { Note } from "./Note.js";
 import { Question } from "./Question.js";
 
 @Entity()
-export class Quiz {
+export class Quiz extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

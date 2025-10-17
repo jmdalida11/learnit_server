@@ -1,8 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  BaseEntity,
+} from "typeorm";
 import { Quiz } from "./Quiz.js";
 
 @Entity()
-export class Question {
+export class Question extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

@@ -5,11 +5,12 @@ import {
   ManyToOne,
   CreateDateColumn,
   UpdateDateColumn,
+  BaseEntity,
 } from "typeorm";
 import { User } from "./User.js";
 
 @Entity()
-export class StudyPlan {
+export class StudyPlan extends BaseEntity {
   @PrimaryGeneratedColumn("uuid")
   id: string;
 

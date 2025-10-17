@@ -1,28 +1,37 @@
 import type { Request, Response } from "express";
-import { AppDataSource } from "../datasource.js";
 import { User } from "../entities/User.js";
 import { CreateUserDTO } from "../validations/user.js";
+import bcrypt from "bcryptjs";
+import { AuthenticatedRequest } from "../middleware/auth.js";
 
-export const getUser = async (req: Request, res: Response): Promise<void> => {
-  const user = await AppDataSource.getRepository(User)
-    .createQueryBuilder("user")
+export const getUser = async (
+  req: AuthenticatedRequest,
+  res: Response
+): Promise<void> => {
+  const user = await User.createQueryBuilder("user")
     .select()
-    .where("user.id = :id", { id: req.params["id"] })
+    .where("user.id = :id", { id: req.session.user?.id })
     .getOne();
 
   if (!user) {
     res.status(404).json({ message: "User not found." });
-    return;
   }
 
-  res.status(200).json(user);
+  res.status(200).json({
+    id: user?.id,
+    username: user?.username,
+    email: user?.email,
+    name: user?.name,
+    createdAt: user?.createdAt,
+    updatedAt: user?.updatedAt,
+  });
 };
 
 export const getAllUsers = async (
   _req: Request,
   res: Response
 ): Promise<void> => {
-  const users = await AppDataSource.getRepository(User).find();
+  const users = await User.find();
   res.status(200).json(users);
 };
 
@@ -33,7 +42,7 @@ export const createUser = async (
   const { username, password, email, name } = req.body as CreateUserDTO;
 
   try {
-    const existingUser = await AppDataSource.getRepository(User).findOne({
+    const existingUser = await User.findOne({
       where: [{ username }, { email }],
     });
 
@@ -41,14 +50,18 @@ export const createUser = async (
       res.status(400).json({ message: "Username or email already exists." });
     }
 
-    const newUser = AppDataSource.getRepository(User).create({
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(salt + password, 10);
+
+    const newUser = User.create({
       username,
-      password,
+      password: hashedPassword,
+      salt,
       email,
       name,
     });
 
-    const savedUser = await AppDataSource.getRepository(User).save(newUser);
+    const savedUser = await User.save(newUser);
     res.status(201).json(savedUser);
   } catch (error) {
     res.status(500).json({ message: "Error on creating a user" });
