@@ -1,18 +1,19 @@
-import type { Request, Response } from "express";
+import type { Response } from "express";
 import { Note } from "../entities/Note.js";
 import { CreateNoteDTO, UpdateNoteDTO } from "../validations/note.js";
 import { User } from "../entities/User.js";
+import { AuthenticatedRequest } from "../middleware/auth.js";
 
 export const createNote = async (
-  req: Request,
-  res: Response,
+  req: AuthenticatedRequest,
+  res: Response
 ): Promise<void> => {
   try {
-    const { userId, title } = req.body as CreateNoteDTO;
+    const { title } = req.body as CreateNoteDTO;
 
     const user = await User.createQueryBuilder("user")
       .select()
-      .where("user.id = :id", { id: userId })
+      .where("user.id = :id", { id: req.session.user?.id })
       .getOne();
 
     if (!user) {
@@ -33,14 +34,12 @@ export const createNote = async (
 };
 
 export const getAllUserNotes = async (
-  req: Request,
-  res: Response,
+  req: AuthenticatedRequest,
+  res: Response
 ): Promise<void> => {
-  const userId = req.params["userId"];
-
   try {
     const notes = await Note.createQueryBuilder("note")
-      .where("note.userId = :userId", { userId })
+      .where("note.userId = :userId", { userId: req.session.user?.id })
       .getMany();
 
     res.status(200).json(notes);
@@ -49,10 +48,14 @@ export const getAllUserNotes = async (
   }
 };
 
-export const getNote = async (req: Request, res: Response): Promise<void> => {
+export const getNote = async (
+  req: AuthenticatedRequest,
+  res: Response
+): Promise<void> => {
   const note = await Note.createQueryBuilder("note")
     .select()
     .where("note.id = :id", { id: req.params["id"] })
+    .andWhere("note.userId = :userId", { userId: req.session.user?.id })
     .getOne();
 
   if (!note) {
@@ -64,8 +67,8 @@ export const getNote = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const updateNote = async (
-  req: Request,
-  res: Response,
+  req: AuthenticatedRequest,
+  res: Response
 ): Promise<void> => {
   const { title, content, tags, isShared } = req.body as UpdateNoteDTO;
 
@@ -73,7 +76,7 @@ export const updateNote = async (
     const id = req.params["id"] || "";
 
     const note = await Note.findOne({
-      where: { id },
+      where: { id, user: { id: req.session.user?.id ?? "" } },
     });
 
     if (!note) {
@@ -94,12 +97,15 @@ export const updateNote = async (
 };
 
 export const deleteNote = async (
-  req: Request,
-  res: Response,
+  req: AuthenticatedRequest,
+  res: Response
 ): Promise<void> => {
   try {
     const note = await Note.findOne({
-      where: { id: req.params["id"] || "" },
+      where: {
+        id: req.params["id"] ?? "",
+        user: { id: req.session.user?.id ?? "" },
+      },
     });
 
     if (!note) {

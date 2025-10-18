@@ -1,7 +1,6 @@
 import z from "zod";
 
 export const createNoteSchema = z.object({
-  userId: z.uuid(),
   title: z.string().min(1).max(255),
 });
 

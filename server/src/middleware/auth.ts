@@ -11,7 +11,7 @@ export interface AuthenticatedRequest extends Request {
   };
 }
 
-export const isAuthenticated = (
+export const authenticate = (
   req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
