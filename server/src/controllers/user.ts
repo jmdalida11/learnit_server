@@ -8,24 +8,28 @@ export const getUser = async (
   req: AuthenticatedRequest,
   res: Response
 ): Promise<void> => {
-  const user = await User.createQueryBuilder("user")
-    .select()
-    .where("user.id = :id", { id: req.session.user?.id })
-    .getOne();
+  try {
+    const user = await User.createQueryBuilder("user")
+      .select()
+      .where("user.id = :id", { id: req.session.user?.id })
+      .getOne();
 
-  if (user) {
-    res.status(200).json({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      name: user.name,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
-    });
-    return;
+    if (user) {
+      res.status(200).json({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        name: user.name,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
+      });
+      return;
+    }
+
+    res.status(404).json({ message: "User not found." });
+  } catch {
+    res.status(500).json({ message: "Error on retrieving user" });
   }
-
-  res.status(404).json({ message: "User not found." });
 };
 
 export const getAllUsers = async (

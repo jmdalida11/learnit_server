@@ -52,18 +52,22 @@ export const getNote = async (
   req: AuthenticatedRequest,
   res: Response
 ): Promise<void> => {
-  const note = await Note.createQueryBuilder("note")
-    .select()
-    .where("note.id = :id", { id: req.params["id"] })
-    .andWhere("note.userId = :userId", { userId: req.session.user?.id })
-    .getOne();
+  try {
+    const note = await Note.createQueryBuilder("note")
+      .select()
+      .where("note.id = :id", { id: req.params["id"] })
+      .andWhere("note.userId = :userId", { userId: req.session.user?.id })
+      .getOne();
 
-  if (!note) {
-    res.status(404).json({ message: "Note not found." });
-    return;
+    if (!note) {
+      res.status(404).json({ message: "Note not found." });
+      return;
+    }
+
+    res.status(200).json(note);
+  } catch {
+    res.status(500).json({ message: "Error retrieving the note." });
   }
-
-  res.status(200).json(note);
 };
 
 export const updateNote = async (
