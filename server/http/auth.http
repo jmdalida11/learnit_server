@@ -5,7 +5,6 @@ Content-Type: application/json
 ### Step 2: Use the CSRF token in the login request
 POST http://localhost:3001/auth/login
 Content-Type: application/json
-X-CSRF-Token: rIgukw3E-ziLNnOBje2Uwpml4gGNSLP_tN74
 
 {
   "username": "baz",
@@ -17,7 +16,7 @@ GET http://localhost:3001/user/profile
 
 ### Logout
 POST http://localhost:3001/auth/logout
-X-CSRF-Token: IrIgukw3E-ziLNnOBje2Uwpml4gGNSLP_tN74
+X-CSRF-Token: D87Gi8dQ-JaSeDO-2PrbVqz0ci9-_BlelwLY
 
 
 ### Get all users

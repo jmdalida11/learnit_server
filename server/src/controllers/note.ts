@@ -22,12 +22,15 @@ export const createNote = async (
     }
 
     const newNote = Note.create({
-      user,
       title,
+      user,
     });
 
     const savedNote = await Note.save(newNote);
-    res.status(201).json(savedNote);
+    res.status(201).json({
+      ...savedNote,
+      user: undefined,
+    });
   } catch (error) {
     res.status(500).json({ message: "Error creating a note" });
   }

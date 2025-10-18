@@ -41,11 +41,18 @@ app.use(
     credentials: true, // allow cookies
   })
 );
-app.use(
-  csurf({
-    cookie: false, // use session to store CSRF secret
-  })
-);
+
+export function conditionalCsrf(
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction
+) {
+  const csrfProtection = csurf({ cookie: false });
+  const csrfExcluded = ["/auth/login"];
+  if (csrfExcluded.includes(req.path)) return next();
+  return csrfProtection(req, res, next);
+}
+app.use(conditionalCsrf);
 
 interface CsrfError extends Error {
   code: string;

@@ -18,19 +18,12 @@ export const login = async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
-    await new Promise<void>((resolve, reject) => {
-      req.session.regenerate((err) => {
-        if (err) return reject(err);
-        (req.session as any).user = { id: user.id };
-        req.session.save((saveErr) => {
-          if (saveErr) return reject(saveErr);
-          resolve();
-        });
-      });
+    req.session.regenerate(() => {
+      (req.session as any).user = { id: user.id };
+      res.json({ message: "Login successful" });
     });
-
-    res.sendStatus(204);
-  } catch {
+  } catch (e) {
+    console.error(e);
     res.status(500).json({ message: "Login failed" });
   }
 };

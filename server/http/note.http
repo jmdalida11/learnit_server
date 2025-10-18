@@ -1,13 +1,26 @@
 ### Create a new note
 POST http://localhost:3001/note/
 Content-Type: application/json
+X-CSRF-Token: wMW1NkWS-cY_OR7uJDVxdBdVka8NJMTpxOXc
+
 {
-    "userId": "ac8ec097-2047-4009-9c91-04a63047b04e",
     "title": "My First Note"
 }
 
 ### Get note
-GET http://localhost:3001/note/7c0a05f9-1e54-42cf-a540-11b20f576237
+GET http://localhost:3001/note/3b681cc8-f220-4e97-8f6f-69d37051cf97
 
 ### Get all notes for a user
-GET http://localhost:3001/note/user/ac8ec097-2047-4009-9c91-04a63047b04e
+GET http://localhost:3001/note
+
+### Update note
+PATCH http://localhost:3001/note/3b681cc8-f220-4e97-8f6f-69d37051cf97
+Content-Type: application/json
+X-CSRF-Token: wMW1NkWS-cY_OR7uJDVxdBdVka8NJMTpxOXc
+
+{
+    "title": "Updated Note Title",
+    "content": "This is the updated content of the note.",
+    "tags": ["reminder", "learning"],
+    "isShared": true
+}
