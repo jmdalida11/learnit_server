@@ -3,6 +3,7 @@ import { User } from "../entities/User.js";
 import { CreateUserDTO } from "../validations/user.js";
 import bcrypt from "bcryptjs";
 import { AuthenticatedRequest } from "../middleware/auth.js";
+import { Session } from "../entities/Session.js";
 
 export const getUser = async (
   req: AuthenticatedRequest,
@@ -31,6 +32,7 @@ export const getAllUsers = async (
   _req: Request,
   res: Response
 ): Promise<void> => {
+  console.log(await Session.find());
   const users = await User.find();
   res.status(200).json(users);
 };

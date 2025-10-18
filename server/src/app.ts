@@ -8,7 +8,9 @@ import cors from "cors";
 import csurf from "csurf";
 
 import "dotenv/config";
-import { initializeDataSource } from "./datasource.js";
+import { AppDataSource, initializeDataSource } from "./datasource.js";
+import { Session } from "./entities/Session.js";
+import { TypeormStore } from "connect-typeorm";
 
 const port = process.env["PORT"] || 3000;
 const app = express();
@@ -27,6 +29,10 @@ app.use(
       secure: false, // set true in production (requires HTTPS)
       maxAge: 1000 * 60 * 60, // 1 hour
     },
+    store: new TypeormStore({
+      cleanupLimit: 2,
+      ttl: 3600, // seconds
+    }).connect(AppDataSource.getRepository(Session)),
   })
 );
 app.use(
@@ -35,11 +41,11 @@ app.use(
     credentials: true, // allow cookies
   })
 );
-// app.use(
-//   csurf({
-//     cookie: false, // use session to store CSRF secret
-//   })
-// );
+app.use(
+  csurf({
+    cookie: false, // use session to store CSRF secret
+  })
+);
 
 interface CsrfError extends Error {
   code: string;
@@ -51,7 +57,7 @@ app.use(
     res: express.Response,
     next: express.NextFunction
   ) => {
-    if (err.code === "EBADCSRFTOKEN") {
+    if (err?.code === "EBADCSRFTOKEN") {
       res.status(403).json({ message: "Invalid CSRF token" });
     }
     next(err);

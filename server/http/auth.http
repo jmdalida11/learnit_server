@@ -14,8 +14,11 @@ X-CSRF-Token: pSTGgOO9-Axs8oJ9eZVvZyEcVpv5p9xya9mU
 
 ### Get user by ID
 GET http://localhost:3001/user/me
-Cookie: sessionId=s%3Apd0tzLmtOuNJEEDufs6pKhdk9qJtUypC.phC8pp4Y7rQ0wYCLxnBeQ7W1x%2BeJaEUXkKL6BtzG%2B7s
 
 ### Logout
 POST http://localhost:3001/auth/logout
 X-CSRF-Token: Y4LSPaDy-A1obEegvcwnV7VuH5NjLeAz-PsI
+
+
+### Get all users
+GET http://localhost:3001/user
