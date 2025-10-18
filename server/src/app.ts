@@ -59,6 +59,7 @@ app.use(
   ) => {
     if (err?.code === "EBADCSRFTOKEN") {
       res.status(403).json({ message: "Invalid CSRF token" });
+      return;
     }
     next(err);
   }
@@ -77,9 +78,9 @@ app.use(
   ) => {
     if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
       res.status(400).send({ message: "Invalid JSON payload" });
+      return;
     }
-    // For other errors, log the details and send a generic error message
-    console.error(err.stack); // Log the full error for debugging
+    console.error(err);
     res.status(500).send({ message: "Something went wrong!" });
   }
 );

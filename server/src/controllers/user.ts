@@ -22,6 +22,7 @@ export const getUser = async (
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     });
+    return;
   }
 
   res.status(404).json({ message: "User not found." });
@@ -35,10 +36,7 @@ export const getAllUsers = async (
   res.status(200).json(users);
 };
 
-export const createUser = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+export const createUser = async (req: Request, res: Response) => {
   const { username, password, email, name } = req.body as CreateUserDTO;
 
   try {
@@ -48,6 +46,7 @@ export const createUser = async (
 
     if (existingUser) {
       res.status(400).json({ message: "Username or email already exists." });
+      return;
     }
 
     const salt = await bcrypt.genSalt(10);

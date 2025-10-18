@@ -18,7 +18,7 @@ router.use((req, res, next) => {
 });
 
 router.get("/", getAllUsers);
-router.get("/me", getUser);
+router.get("/profile", getUser);
 router.post("/", validateBody(createUserSchema), createUser);
 
 export default router;

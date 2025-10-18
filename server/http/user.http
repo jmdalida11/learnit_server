@@ -14,4 +14,4 @@ GET http://localhost:3001/user/
 
 
 ### Get user by ID
-GET http://localhost:3001/user/me
+GET http://localhost:3001/user/profile
