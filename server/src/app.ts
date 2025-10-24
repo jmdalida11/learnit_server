@@ -2,6 +2,7 @@ import express from "express";
 import userRouter from "./routes/user.js";
 import noteRouter from "./routes/note.js";
 import authRouter from "./routes/auth.js";
+import quizRouter from "./routes/quiz.js";
 import session from "express-session";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -95,6 +96,7 @@ app.use(
 app.use("/user", userRouter);
 app.use("/note", noteRouter);
 app.use("/auth", authRouter);
+app.use("/quiz", quizRouter);
 
 initializeDataSource();
 
