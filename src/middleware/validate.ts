@@ -9,8 +9,7 @@ export function validateBody<T extends z.ZodTypeAny>(schema: T) {
     } catch (err) {
       if (err instanceof ZodError) {
         return res.status(400).json({
-          message: "Validation failed",
-          issues: err.issues,
+          message: err.issues[0]?.message,
         });
       }
       next(err);

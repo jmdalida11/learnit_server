@@ -20,7 +20,9 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
     req.session.regenerate(() => {
       (req.session as any).user = { id: user.id };
-      res.json({ message: "Login successful" });
+      req.session.save(() => {
+        res.json({ message: "Login successful" });
+      });
     });
   } catch (e) {
     console.error(e);

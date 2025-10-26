@@ -17,6 +17,7 @@ const port = process.env["PORT"] || 3000;
 const app = express();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(
   session({
@@ -29,16 +30,18 @@ app.use(
       httpOnly: true, // prevent JS access
       secure: false, // set true in production (requires HTTPS)
       maxAge: 1000 * 60 * 60, // 1 hour
+      sameSite: "lax",
     },
     store: new TypeormStore({
-      cleanupLimit: 2,
+      cleanupLimit: 10,
       ttl: 3600, // seconds
     }).connect(AppDataSource.getRepository(Session)),
   })
 );
 app.use(
   cors({
-    origin: "*", // your frontend URL
+    // origin: "*", // your frontend URL
+    origin: "http://localhost:5173",
     credentials: true, // allow cookies
   })
 );
@@ -49,7 +52,7 @@ export function conditionalCsrf(
   next: express.NextFunction
 ) {
   const csrfProtection = csurf({ cookie: false });
-  const csrfExcluded = ["/auth/login"];
+  const csrfExcluded = ["/auth/login", "/user"];
   if (csrfExcluded.includes(req.path)) return next();
   return csrfProtection(req, res, next);
 }

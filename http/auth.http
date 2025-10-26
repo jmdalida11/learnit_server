@@ -7,8 +7,8 @@ POST http://localhost:3001/auth/login
 Content-Type: application/json
 
 {
-  "username": "baz",
-  "password": "barbarbar"
+  "username": "kirito11",
+  "password": "12345678"
 }
 
 ### Get user by ID
@@ -16,7 +16,7 @@ GET http://localhost:3001/user/profile
 
 ### Logout
 POST http://localhost:3001/auth/logout
-X-CSRF-Token: D87Gi8dQ-JaSeDO-2PrbVqz0ci9-_BlelwLY
+X-CSRF-Token: oCIRqU92-y8MReUBPQ5p3QliNzGkflBKRT9U
 
 
 ### Get all users
