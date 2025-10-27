@@ -96,8 +96,8 @@ export const updateNote = async (
     note.tags = tags ?? note.tags;
     note.isShared = isShared ?? note.isShared;
 
-    const updatedNote = await Note.save(note);
-    res.status(200).json(updatedNote);
+    await Note.save(note);
+    res.status(200).json({ message: "Note updated successfully." });
   } catch (error) {
     res.status(500).json({ message: "Error updating the note." });
   }

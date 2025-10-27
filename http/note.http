@@ -1,7 +1,7 @@
 ### Create a new note
 POST http://localhost:3001/note/
 Content-Type: application/json
-X-CSRF-Token: wMW1NkWS-cY_OR7uJDVxdBdVka8NJMTpxOXc
+X-CSRF-Token: ogZfcvrq-9f1AAJnHS-EP8eYXbnnUj08PiYs
 
 {
     "title": "My First Note"
@@ -14,13 +14,10 @@ GET http://localhost:3001/note/3b681cc8-f220-4e97-8f6f-69d37051cf97
 GET http://localhost:3001/note
 
 ### Update note
-PATCH http://localhost:3001/note/3b681cc8-f220-4e97-8f6f-69d37051cf97
+PATCH http://localhost:3001/note/bbb065a2-c439-42ab-a227-380e44f0fd75
 Content-Type: application/json
-X-CSRF-Token: wMW1NkWS-cY_OR7uJDVxdBdVka8NJMTpxOXc
+X-CSRF-Token: lM1Qqvkf-70L2BBRT--j-o2xsnutyvdwgC78
 
 {
-    "title": "Updated Note Title",
-    "content": "This is the updated content of the note.",
-    "tags": ["reminder", "learning"],
-    "isShared": true
+  "content": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
 }
