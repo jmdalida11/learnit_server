@@ -21,16 +21,16 @@ export const createNote = async (
       return;
     }
 
-    const newNote = Note.create({
-      title,
-      user,
-    });
+    const newNote = await Note.save(
+      Note.create({
+        title,
+        user,
+      })
+    );
 
-    const savedNote = await Note.save(newNote);
-    res.status(201).json({
-      ...savedNote,
-      user: undefined,
-    });
+    res
+      .status(200)
+      .json({ message: "Note created successfully.", id: newNote.id });
   } catch (error) {
     res.status(500).json({ message: "Error creating a note" });
   }
@@ -121,7 +121,7 @@ export const deleteNote = async (
     }
 
     await Note.remove(note);
-    res.status(204).send();
+    res.status(200).json({ message: "Note deleted successfully." });
   } catch (error) {
     res.status(500).json({ message: "Error deleting the note." });
   }
