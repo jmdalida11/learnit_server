@@ -46,7 +46,7 @@ export const getAllUserNotes = async (
 
     const [notes, total] = await Note.createQueryBuilder("note")
       .where("note.userId = :userId", { userId: req.session.user?.id })
-      .orderBy("createdAt", "DESC")
+      .orderBy("updatedAt", "DESC")
       .skip(page * pageSize)
       .take(pageSize)
       .getManyAndCount();
