@@ -41,12 +41,17 @@ export const getAllUserNotes = async (
   res: Response,
 ): Promise<void> => {
   try {
-    const notes = await Note.createQueryBuilder("note")
+    const page = parseInt(req.query["page"] as string) || 0;
+    const pageSize = parseInt(req.query["pageSize"] as string) || 10;
+
+    const [notes, total] = await Note.createQueryBuilder("note")
       .where("note.userId = :userId", { userId: req.session.user?.id })
       .orderBy("createdAt", "DESC")
-      .getMany();
+      .skip(page * pageSize)
+      .take(pageSize)
+      .getManyAndCount();
 
-    res.status(200).json(notes);
+    res.status(200).json({ notes, total });
   } catch (error) {
     res.status(500).json({ message: "Error retrieving notes for the user." });
   }
