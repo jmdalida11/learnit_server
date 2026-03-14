@@ -15,7 +15,9 @@ import { DataSource } from "typeorm";
 import { createDataSourceInstance } from "datasource.js";
 
 const PORT = process.env["PORT"] || 3000;
-const CORS = process.env["CORS"];
+const CORS_ORIGIN = process.env["CORS"]
+  ? process.env["CORS"].split(",").map((origin) => origin.trim())
+  : [];
 
 interface CsrfError extends Error {
   code: string;
@@ -66,8 +68,7 @@ class LearnitApp {
     );
     this.app.use(
       cors({
-        origin: CORS, // your frontend URL
-        // origin: "http://localhost:5173",
+        origin: CORS_ORIGIN,
         credentials: true, // allow cookies
       }),
     );
@@ -131,7 +132,10 @@ class LearnitApp {
   }
 
   public run(): void {
-    this.app.listen(PORT, () => {
+    this.app.listen(Number(PORT), "0.0.0.0", (err) => {
+      if (err) {
+        console.log("Something went wrong. " + err);
+      }
       console.log(`Server is running on PORT = ${PORT}`);
     });
   }
