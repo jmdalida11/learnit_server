@@ -1,12 +1,12 @@
-import { Quiz } from "../entities/Quiz.js";
-import { User } from "../entities/User.js";
-import { AuthenticatedRequest } from "../middleware/auth.js";
+import { Quiz } from "@entities/Quiz.js";
+import { User } from "@entities/User.js";
+import { AuthenticatedRequest } from "@middleware/auth.js";
 import type { Response } from "express";
-import { CreateQuizDTO, UpdateQuizDTO } from "../validations/quiz.js";
+import { CreateQuizDTO, UpdateQuizDTO } from "@validations/quiz.js";
 
 export const getAllUserQuizzes = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
 ) => {
   try {
     const user = await User.createQueryBuilder("user")

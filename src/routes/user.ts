@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { createUser, getAllUsers, getUser } from "../controllers/user.js";
-import { createUserSchema } from "../validations/user.js";
-import { validateBody } from "../middleware/validate.js";
-import { authenticate } from "../middleware/auth.js";
+import { createUser, getAllUsers, getUser } from "@controllers/user.js";
+import { createUserSchema } from "@validations/user.js";
+import { validateBody } from "@middleware/validate.js";
+import { authenticate } from "@middleware/auth.js";
 
 const router = Router();
 
@@ -10,7 +10,7 @@ router.use((req, res, next) => {
   const openRoutes = [{ path: "/", method: "POST" }];
 
   const isOpen = openRoutes.some(
-    (r) => r.path === req.path && r.method === req.method
+    (r) => r.path === req.path && r.method === req.method,
   );
 
   if (isOpen) return next();

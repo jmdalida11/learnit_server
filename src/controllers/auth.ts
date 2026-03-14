@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { User } from "../entities/User.js";
+import { User } from "@entities/User.js";
 import bcrypt from "bcryptjs";
 
 export const login = async (req: Request, res: Response): Promise<void> => {

@@ -13,7 +13,9 @@ import { AppDataSource, initializeDataSource } from "./datasource.js";
 import { Session } from "./entities/Session.js";
 import { TypeormStore } from "connect-typeorm";
 
-const port = process.env["PORT"] || 3000;
+const PORT = process.env["PORT"] || 3000;
+const CORS = process.env["CORS"];
+
 const app = express();
 
 app.use(express.json());
@@ -36,20 +38,20 @@ app.use(
       cleanupLimit: 10,
       ttl: 3600, // seconds
     }).connect(AppDataSource.getRepository(Session)),
-  })
+  }),
 );
 app.use(
   cors({
-    // origin: "*", // your frontend URL
-    origin: "http://localhost:5173",
+    origin: CORS, // your frontend URL
+    // origin: "http://localhost:5173",
     credentials: true, // allow cookies
-  })
+  }),
 );
 
 export function conditionalCsrf(
   req: express.Request,
   res: express.Response,
-  next: express.NextFunction
+  next: express.NextFunction,
 ) {
   const csrfProtection = csurf({ cookie: false });
   const csrfExcluded = ["/auth/login", "/user"];
@@ -66,14 +68,14 @@ app.use(
     err: CsrfError,
     _req: express.Request,
     res: express.Response,
-    next: express.NextFunction
+    next: express.NextFunction,
   ) => {
     if (err?.code === "EBADCSRFTOKEN") {
       res.status(403).json({ message: "Invalid CSRF token" });
       return;
     }
     next(err);
-  }
+  },
 );
 
 interface SyntaxErrorWithStatus extends SyntaxError {
@@ -85,7 +87,7 @@ app.use(
     err: SyntaxErrorWithStatus,
     _req: express.Request,
     res: express.Response,
-    _next: express.NextFunction
+    _next: express.NextFunction,
   ) => {
     if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
       res.status(400).send({ message: "Invalid JSON payload" });
@@ -93,7 +95,7 @@ app.use(
     }
     console.error(err);
     res.status(500).send({ message: "Something went wrong!" });
-  }
+  },
 );
 
 app.use("/user", userRouter);
@@ -103,6 +105,6 @@ app.use("/quiz", quizRouter);
 
 initializeDataSource();
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });

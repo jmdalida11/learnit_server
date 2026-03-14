@@ -1,15 +1,15 @@
 import { Router } from "express";
 
-import { authenticate } from "../middleware/auth.js";
+import { authenticate } from "@middleware/auth.js";
 import {
   createQuiz,
   deleteQuiz,
   getAllUserQuizzes,
   getQuiz,
   updateQuiz,
-} from "../controllers/quiz.js";
-import { createQuizSchema, updateQuizSchema } from "../validations/quiz.js";
-import { validateBody } from "../middleware/validate.js";
+} from "@controllers/quiz.js";
+import { createQuizSchema, updateQuizSchema } from "@validations/quiz.js";
+import { validateBody } from "@middleware/validate.js";
 
 const router = Router();
 

@@ -1,12 +1,12 @@
 import type { Response } from "express";
-import { Note } from "../entities/Note.js";
-import { CreateNoteDTO, UpdateNoteDTO } from "../validations/note.js";
-import { User } from "../entities/User.js";
-import { AuthenticatedRequest } from "../middleware/auth.js";
+import { Note } from "@entities/Note.js";
+import { CreateNoteDTO, UpdateNoteDTO } from "@validations/note.js";
+import { User } from "@entities/User.js";
+import { AuthenticatedRequest } from "@middleware/auth.js";
 
 export const createNote = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const { title } = req.body as CreateNoteDTO;
@@ -25,7 +25,7 @@ export const createNote = async (
       Note.create({
         title,
         user,
-      })
+      }),
     );
 
     res
@@ -38,7 +38,7 @@ export const createNote = async (
 
 export const getAllUserNotes = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const notes = await Note.createQueryBuilder("note")
@@ -53,7 +53,7 @@ export const getAllUserNotes = async (
 
 export const getNote = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const note = await Note.createQueryBuilder("note")
@@ -75,7 +75,7 @@ export const getNote = async (
 
 export const updateNote = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   const { title, content, tags, isShared } = req.body as UpdateNoteDTO;
 
@@ -105,7 +105,7 @@ export const updateNote = async (
 
 export const deleteNote = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const note = await Note.findOne({

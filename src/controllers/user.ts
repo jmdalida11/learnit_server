@@ -1,12 +1,12 @@
 import type { Request, Response } from "express";
-import { User } from "../entities/User.js";
-import { CreateUserDTO } from "../validations/user.js";
+import { User } from "@entities/User.js";
+import { CreateUserDTO } from "@validations/user.js";
 import bcrypt from "bcryptjs";
-import { AuthenticatedRequest } from "../middleware/auth.js";
+import { AuthenticatedRequest } from "@middleware/auth.js";
 
 export const getUser = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     const user = await User.createQueryBuilder("user")
@@ -34,7 +34,7 @@ export const getUser = async (
 
 export const getAllUsers = async (
   _req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   const users = await User.find();
   res.status(200).json(users);

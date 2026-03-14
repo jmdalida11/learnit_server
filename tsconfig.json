@@ -2,6 +2,13 @@
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
+    "baseUrl": "./src",
+    "paths": {
+      "@entities/*": ["entities/*"],
+      "@middleware/*": ["middleware/*"],
+      "@validations/*": ["validations/*"],
+      "@controllers/*": ["controllers/*"]
+    },
     // "rootDir": "./src",
     // "outDir": "./dist",
 
