@@ -43,6 +43,7 @@ export const getAllUserNotes = async (
   try {
     const notes = await Note.createQueryBuilder("note")
       .where("note.userId = :userId", { userId: req.session.user?.id })
+      .orderBy("createdAt", "DESC")
       .getMany();
 
     res.status(200).json(notes);
