@@ -1,0 +1,11 @@
+### Get all notes for a quizzes
+GET http://localhost:3001/quiz
+
+### Create new quiz
+POST http://localhost:3001/quiz
+Content-Type: application/json
+X-CSRF-Token: cG2sZBkc-f2qb2lvkaUcmSOhYw4mp-DBTVS8
+
+{
+    "title": "Quiz 1"
+}

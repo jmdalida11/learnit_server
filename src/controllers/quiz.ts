@@ -9,17 +9,12 @@ export const getAllUserQuizzes = async (
   res: Response,
 ) => {
   try {
-    const user = await User.createQueryBuilder("user")
-      .select()
-      .where("user.id = :id", { id: req.session.user?.id })
-      .getOne();
+    const quizzes = await Quiz.find({
+      where: { user: { id: req.session.user?.id ?? "" } },
+      relations: ["note", "questions", "categories"],
+    });
 
-    if (!user) {
-      res.status(404).json({ message: "User not found." });
-      return;
-    }
-
-    res.status(200).json(user.quizzes);
+    res.status(200).json(quizzes);
   } catch (error) {
     res.status(500).json({ message: "Error retrieving quizzes for the user." });
   }
@@ -62,13 +57,18 @@ export const createQuiz = async (req: AuthenticatedRequest, res: Response) => {
       return;
     }
 
-    const newQuiz = new Quiz();
-    newQuiz.title = title;
+    const newQuiz = await Quiz.save(
+      Quiz.create({
+        title,
+        user,
+      }),
+    );
 
-    const savedQuiz = user.quizzes.push(newQuiz);
-    await User.save(user);
-    res.status(201).json(savedQuiz);
+    res
+      .status(200)
+      .json({ message: "Quiz created successfully.", id: newQuiz.id });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Error creating a quiz" });
   }
 };
