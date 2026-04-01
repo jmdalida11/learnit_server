@@ -11,6 +11,7 @@ export const getAllUserQuizzes = async (
   try {
     const quizzes = await Quiz.find({
       where: { user: { id: req.session.user?.id ?? "" } },
+      order: { updatedAt: "DESC" },
       relations: ["note", "questions", "categories"],
     });
 
