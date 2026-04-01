@@ -12,7 +12,7 @@ import "dotenv/config";
 import { Session } from "./entities/Session.js";
 import { TypeormStore } from "connect-typeorm";
 import { DataSource } from "typeorm";
-import { createDataSourceInstance } from "datasource.js";
+import { AppDataSource } from "datasource.js";
 
 const PORT = process.env["PORT"] || 3000;
 const CORS_ORIGIN = process.env["CORS"]
@@ -142,7 +142,7 @@ class LearnitApp {
 }
 
 const main = async () => {
-  const app = new LearnitApp(express(), createDataSourceInstance());
+  const app = new LearnitApp(express(), AppDataSource);
   await app.initializeDataSource();
   app.run();
 };

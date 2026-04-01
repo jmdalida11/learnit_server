@@ -6,18 +6,13 @@ import { Question } from "./entities/Question.js";
 import { StudyPlan } from "./entities/StudyPlan.js";
 import { Notification } from "./entities/Notification.js";
 import { Session } from "./entities/Session.js";
+import { Category } from "./entities/Category.js";
 
-export const createDataSourceInstance = () => {
-  return new DataSource({
-    type: "sqlite",
-    // host: process.env["DB_HOST"] || "localhost",
-    // port: 5432,
-    // username: process.env["DB_USER"] || "postgres",
-    // password: process.env["DB_PASSWORD"] || "password",
-    database: process.env["DB_NAME"] || "learnit.db",
-    logging: false,
-    entities: [User, Note, Quiz, Question, StudyPlan, Notification, Session],
-    synchronize: false,
-    migrations: ["src/migrations/*.ts"],
-  });
-};
+export const AppDataSource = new DataSource({
+  type: "sqlite",
+  database: process.env["DB_NAME"] || "learnit.db",
+  logging: false,
+  entities: [User, Note, Quiz, Question, StudyPlan, Notification, Session, Category],
+  synchronize: false,
+  migrations: ["src/migrations/*.ts"],
+});

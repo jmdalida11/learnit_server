@@ -11,6 +11,7 @@ import { Note } from "./Note.js";
 import { Quiz } from "./Quiz.js";
 import { StudyPlan } from "./StudyPlan.js";
 import { Notification } from "./Notification.js";
+import { Category } from "./Category.js";
 
 @Entity()
 export class User extends BaseEntity {
@@ -46,6 +47,9 @@ export class User extends BaseEntity {
 
   @OneToMany(() => Notification, (notif) => notif.user)
   notifications: Notification[];
+
+  @OneToMany(() => Category, (category) => category.user)
+  categories: Category[];
 
   @CreateDateColumn()
   createdAt: Date;

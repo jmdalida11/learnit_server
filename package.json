@@ -8,7 +8,8 @@
     "dev": "tsx watch src/app.ts",
     "build": "tsc",
     "start": "node dist/app.js",
-    "typeorm": "tsx ./node_modules/typeorm/cli.js"
+    "migration:generate": "tsx ./node_modules/typeorm/cli.js migration:generate -d src/datasource.ts",
+    "migration:run": "tsx ./node_modules/typeorm/cli.js migration:run -d src/datasource.ts"
   },
   "dependencies": {
     "bcryptjs": "^3.0.2",
