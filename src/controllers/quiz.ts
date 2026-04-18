@@ -1,4 +1,5 @@
 import { Quiz } from "@entities/Quiz.js";
+import { Question } from "@entities/Question.js";
 import { User } from "@entities/User.js";
 import { AuthenticatedRequest } from "@middleware/auth.js";
 import type { Response } from "express";
@@ -25,18 +26,19 @@ export const getQuiz = async (req: AuthenticatedRequest, res: Response) => {
   try {
     const quizId = req.params["id"];
 
-    const user = await User.createQueryBuilder("user")
-      .leftJoinAndSelect("user.quizzes", "quiz")
-      .where("user.id = :id", { id: req.session.user?.id })
-      .andWhere("quiz.id = :quizId", { quizId })
+    const quiz = await Quiz.createQueryBuilder("quiz")
+      .leftJoinAndSelect("quiz.questions", "questions")
+      .leftJoinAndSelect("quiz.note", "note")
+      .leftJoinAndSelect("quiz.categories", "categories")
+      .innerJoin("quiz.user", "user")
+      .where("quiz.id = :quizId", { quizId })
+      .andWhere("user.id = :userId", { userId: req.session.user?.id })
       .getOne();
 
-    if (!user) {
+    if (!quiz) {
       res.status(404).json({ message: "Quiz not found for the user." });
       return;
     }
-
-    const quiz = user.quizzes.find((q) => q.id === quizId);
 
     res.status(200).json(quiz);
   } catch (error) {
@@ -46,7 +48,7 @@ export const getQuiz = async (req: AuthenticatedRequest, res: Response) => {
 
 export const createQuiz = async (req: AuthenticatedRequest, res: Response) => {
   try {
-    const { title } = req.body as CreateQuizDTO;
+    const { title, questions = [] } = req.body as CreateQuizDTO;
 
     const user = await User.createQueryBuilder("user")
       .select()
@@ -64,6 +66,20 @@ export const createQuiz = async (req: AuthenticatedRequest, res: Response) => {
         user,
       }),
     );
+
+    if (questions.length > 0) {
+      const questionEntities = questions.map((q) => {
+        const question = new Question();
+        question.question = q.question;
+        question.type = q.type;
+        question.correctAnswer = q.correctAnswer;
+        question.quiz = newQuiz;
+        if (q.options) question.options = q.options;
+        return question;
+      });
+
+      await Question.save(questionEntities);
+    }
 
     res
       .status(200)

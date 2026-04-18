@@ -15,11 +15,11 @@ export class Question extends BaseEntity {
   @Column("text")
   question: string;
 
-  @Column("simple-array", { nullable: true })
-  options: string[];
-
-  @Column("text", { nullable: true })
+  @Column("text")
   correctAnswer: string;
+
+  @Column("simple-array", { nullable: true })
+  options?: string[];
 
   @Column({
     type: "text",
